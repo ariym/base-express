@@ -1,0 +1,5 @@
+import {Request, Response, NextFunction} from 'express';
+export default (req: Request, res: Response, next: NextFunction) => {
+  res.status(404);
+  next(new Error('Not Found'));
+}
