@@ -1,6 +1,7 @@
 temp/
-
 .DS_Store
+*.db-journal
+*.db
 
 # Logs
 logs
