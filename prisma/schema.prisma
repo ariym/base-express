@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+//        types of data
+// 1. content:    clips, files, spaces
+// 2. navigator:  segments, markers
+// 3. data:       tags, metatags
+
+// source (filesystem or web url)
+model File {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String // filename on disk
+  size      Int // in bytes
+  runTime   Decimal // deciseconds (10th of a second)
+  type      String //mp4, mp3, etc
+  location  String // location on disk or web
+
+  // original child clip (descendent clips descend from this child and not directly from the file)
+  clip Clip?
+}
+
+// beginning and endpoint of a clip
+model Segment {
+  id String @id @default(cuid())
+
+  tsBegin Int
+  tsEnd   Int
+
+  clip   Clip   @relation(fields: [clipId], references: [id])
+  clipId String
+
+  preferences String
+  tags        Tag[]
+}
+
+model Clip {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // if the clip has a file, the only timeline entry is made with the file (instead of a child clip)
+  timeline Segment[]
+
+  // only one clip is meant to represent a file, all subsequent clips are children of that clip (and have no reference to that file except via the parent clip)
+  file   File   @relation(fields: [fileId], references: [id])
+  fileId String @unique
+
+  spaces Space[]
+}
+
+// akin to a playlist or a folder
+model Space {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String
+  clips       Clip[]
+  tags        Tag[]
+
+  grid  String
+  query String
+}
+
+// keywords for sort/filter/search
+model Tag {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  Segment   Segment? @relation(fields: [segmentId], references: [id])
+  segmentId String?
+  Space     Space?   @relation(fields: [spaceId], references: [id])
+  spaceId   String?
+}
+
+// attributes (length, )
+model Metadata {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Marker {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ts        Int
+}
