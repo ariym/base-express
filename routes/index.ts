@@ -6,19 +6,12 @@ const prisma = new PrismaClient();
 
 // route to test that prisma saves
 server.post('/prisma-create', async (req: Request, res: Response) => {
-  const { ts } = req.body;
+  const { petName } = req.body;
 
-  // 1. read json from request body
-  // 2. save json to prisma
-  // 3. query prisma for saved json
-  // 4. send prisma query response back to client
+  const newRow = await prisma.pet.create({ data: {name: petName} });
 
-  // Pass 'user' object into query
-  const newClip = await prisma.marker.create({ data: { ts } });
-
-  res.json(newClip);
+  res.json(newRow);
 
 });
-
 
 export default server;

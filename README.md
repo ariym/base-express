@@ -1,2 +1,19 @@
 # ts-nodemon-base
-Starter boilerplate for typescript projects using nodemon.
+
+Starter boilerplate
+
+* Typescript
+* ExpressJS
+* Prisma
+* dotenv
+* multer
+
+## Getting started
+
+```bash
+npm i
+
+prisma generate
+
+npm run dev
+```
