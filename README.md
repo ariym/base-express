@@ -15,5 +15,7 @@ npm i
 
 prisma generate
 
+cp env.template .env
+
 npm run dev
 ```
