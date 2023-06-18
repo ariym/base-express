@@ -1,4 +1,4 @@
-# ts-nodemon-base
+# base-express
 
 Starter boilerplate
 
