@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 
 import routes from './routes';
 import { getTimestamp } from './util/getTimestamp';
-import { logger, notFoundError, errorHandler } from './middleware';
+import { logger, errorHandler } from './middleware';
 
+// app.use(notFoundError); // throw error for routes not found in routes.ts
 
 // environment variables
 require('dotenv').config({path: __dirname + '/.env'});
@@ -30,7 +31,6 @@ app.use(routes);
 
 
 // post route middleware
-app.use(notFoundError); // throw error for routes not found in routes.ts
 app.use(errorHandler);
 
 // catch unhandled promise rejections
