@@ -15,10 +15,20 @@ cp env.template .env
 npm run dev
 ```
 
+## Docker
+
+```text
+# Create Docker Image
+docker build -t base-express .
+
+# Run Docker Image
+docker run -p 3000:3000 -d base-express
+```
+
 ## Made With
 
 * Typescript
-* ExpressJS
+* Express
 * Prisma
 * dotenv
 * multer
